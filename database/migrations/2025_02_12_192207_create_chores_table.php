@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->enum('status', ['pending', 'completed']);
-            $table->unsignedBigInteger('assigned_to');
+            $table->enum('status', ['pending', 'completed'])->nullable()->default('pending');
+            $table->unsignedBigInteger('assigned_to')->nullable();
             $table->foreign('assigned_to')->references('id')->on('users');
             $table->dateTime('due_date')->nullable();
             $table->timestamps();

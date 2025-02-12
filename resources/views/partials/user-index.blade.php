@@ -10,8 +10,14 @@
             @foreach ($user->chores as $chore)
                 <li>{{ $chore->name }} - {{ $chore->description ?? "no hay descripción" }} (status: {{ $chore->status }})
                     <div style="display: inline; margin-left:1em;">
-                        <button type="button" class="btn btn-success">Hecha</button>
-                        <button type="button" class="btn btn-danger">Borrar</button>
+                        <form action="{{ route('chore.doMarkChoreAsDone', $chore->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Hecha</button>
+                        </form>
+                        <form action="{{ route('chore.doDeleteChore', $chore->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Borrar</button>
+                        </form>
                     </div>
                 </li>
             @endforeach

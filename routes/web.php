@@ -8,3 +8,4 @@ Route::get('/', function () {
 
 
 Route::prefix('users')->group(base_path('routes/users/users.php'));
+Route::prefix('chores')->group(base_path('routes/chores/chores.php'));
