@@ -46,7 +46,7 @@ class UserController extends Controller
             -> Un botón para marcar como hecha la tarea.
         */
         if ($user && password_verify($request->get("password"), $user->password)) {
-            return view('user_views.index'); // CARGA LA VIEW PRINCIPAL CON LA INFO DEL USUARIO
+            return view('user_views.index', compact("user")); // CARGA LA VIEW PRINCIPAL CON LA INFO DEL USUARIO
         } else {
             return redirect()->back()->withErrors($validator);
         }

@@ -5,32 +5,18 @@
         uno para marcar la tarea como realizada y otro para eliminar la tarea
     </p>
     <p>Los botones que pongo aquí son sólo un ejemplo visual de cómo se podría ver, pero el diseño es libre</p>
-    <ul>
-        <li>TAREA 1
-            <div style="display: inline; margin-left:1em;">
-                <button type="button" class="btn btn-success">Hecha</button>
-                <button type="button" class="btn btn-danger">Borrar</button>
-            </div>
-        </li>
-        <li>TAREA 2<div style="display: inline; margin-left:1em;">
-                <button type="button" class="btn btn-success">Hecha</button>
-                <button type="button" class="btn btn-danger">Borrar</button>
-            </div>
-        </li>
-        <li>TAREA 3<div style="display: inline; margin-left:1em;">
-                <button type="button" class="btn btn-success">Hecha</button>
-                <button type="button" class="btn btn-danger">Borrar</button>
-            </div>
-        </li>
-        <li>TAREA 4<div style="display: inline; margin-left:1em;">
-                <button type="button" class="btn btn-success">Hecha</button>
-                <button type="button" class="btn btn-danger">Borrar</button>
-            </div>
-        </li>
-        <li>TAREA 5<div style="display: inline; margin-left:1em;">
-                <button type="button" class="btn btn-success">Hecha</button>
-                <button type="button" class="btn btn-danger">Borrar</button>
-            </div>
-        </li>
-    </ul>
+    @if (isset($user) && $user->chores->count() > 0)
+        <ul>
+            @foreach ($user->chores as $chore)
+                <li>{{ $chore->name }}
+                    <div style="display: inline; margin-left:1em;">
+                        <button type="button" class="btn btn-success">Hecha</button>
+                        <button type="button" class="btn btn-danger">Borrar</button>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    @else
+        <p>No tienes tareas asignadas</p>
+    @endif
 </main>
