@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -47,9 +51,36 @@ class UserController extends Controller
             -> password_repeat es obligatoria y debe ser igual a password
         */
 
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|string|email:rfc,dns',
+            'password' => 'required|string',
+            'repeat_password' => 'required|string'
+        ], [
+            "name.required" => 'Por favor, ingrese el nombre',
+            "email.required" => 'Por favor, ingrese el email',
+            "password.required" => 'Por favor, ingrese la contraseña',
+            "repeat_password.required" => 'Por favor, ingrese el campo de repetir contraseña',
+        ]);
+
+        
         // SI LOS DATOS SON INVÁLIDOS, DEVOLVER A LA PÁGINA ANTERIOR E IMPRIMIR LOS ERRORES DE VALIDACIÓN
+        
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
 
         // SI LOS DATOS SON VÁLIDOS (SI EL REGISTRO SE HA REALIZADO CORRECTAMENTE) CARGAR LA VIEW DE LOGIN PARA PODER REALIZAR LOGIN
+        $user = new User();
+        $user->name = $request->get("name");
+        $user->email = $request->get("email");
+        $user->password = Hash::make($request->get("password"));
+
+        if (request()->get("repeat_password") != $request->get("password")) {
+            return redirect()->back()->withErrors("Los campos de contraseña no coinciden");
+        }
+
+        $user->save();
 
         return view('user_views.login'); // CARGA LA VIEW DE LOGIN PARA PODER REALIZAR LOGIN
     }
