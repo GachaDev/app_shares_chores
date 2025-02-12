@@ -8,7 +8,7 @@
     @if (isset($user) && $user->chores->count() > 0)
         <ul>
             @foreach ($user->chores as $chore)
-                <li>{{ $chore->name }}
+                <li>{{ $chore->name }} - {{ $chore->description ?? "no hay descripción" }} (status: {{ $chore->status }})
                     <div style="display: inline; margin-left:1em;">
                         <button type="button" class="btn btn-success">Hecha</button>
                         <button type="button" class="btn btn-danger">Borrar</button>
