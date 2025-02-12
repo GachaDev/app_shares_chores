@@ -18,10 +18,24 @@ class UserController extends Controller
     //Do login
     public function doLogin(Request $request) {
         // VALIDAR DATOS DE ENTRADA
-
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email:rfc,dns',
+            'password' => 'required|string'
+        ], [
+            "email.required" => 'Por favor, ingrese el email',
+            "password.required" => 'Por favor, ingrese la contraseña'
+        ]);
         // SI LOS DATOS SON INVÁLIDOS, DEVOLVER A LA PÁGINA ANTERIOR E IMPRIMIR LOS ERRORES DE VALIDACIÓN
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
         // SI LOS DATOS SON VÁLIDOS (SI EL LOGIN ES CORRECTO) CARGAR LA VISTA PRINCIPAL DEL USUARIO.
+        $user = User::where("email", $request->get("email"))->first();
+
+        
+
         // LA VISTA PRINCIPAL DE USUARIO DEBE INCLUIR:
         /*
             -> Un header que contenga el nombre del usuario.
@@ -31,8 +45,11 @@ class UserController extends Controller
             -> Un botón al lado de cada tarea para eliminar la tarea.
             -> Un botón para marcar como hecha la tarea.
         */
-
-        return view('user_views.index'); // CARGA LA VIEW PRINCIPAL CON LA INFO DEL USUARIO
+        if ($user && password_verify($request->get("password"), $user->password)) {
+            return view('user_views.index'); // CARGA LA VIEW PRINCIPAL CON LA INFO DEL USUARIO
+        } else {
+            return redirect()->back()->withErrors($validator);
+        }
     }
 
     //Show register form
